@@ -17,17 +17,21 @@ public class CardSetup : MonoBehaviour {
 
     private ApiController api;
 
-	// Use this for initialization
-	IEnumerator Start () {
+    public void SetCardId(int newId)
+    {
+        cardId = newId;
+    }
+
+    IEnumerator GetCardInfo()
+    {
         api = GameObject.FindObjectOfType<ApiController>();
         yield return api.GetCardInfo(cardId);
         json = api.result;
-        yield return GenerateCard();
-	}
+    }
 
-    IEnumerator GenerateCard()
+    public IEnumerator GenerateCard()
     {
-        Debug.Log("generating card");
+        yield return GetCardInfo();
         var cardInfo = JSON.Parse(json);
         name = cardInfo["name"];
         description = cardInfo["description"];
