@@ -8,11 +8,11 @@ public class CardSetup : MonoBehaviour {
     public int cardId;
     public string json;
 
-    public string name, description, image;
+    public string name, description, image, background;
 
     public int cost, rollMin, rollMax;
 
-    public CardTexture main;
+    public CardTexture main, cardBackground;
     public UILabel cardName, cardDescription, cardCost, cardTrigger;
 
     private ApiController api;
@@ -32,6 +32,7 @@ public class CardSetup : MonoBehaviour {
         name = cardInfo["name"];
         description = cardInfo["description"];
         image = cardInfo["image"];
+        background = cardInfo["background"];
         cost = int.Parse(cardInfo["cost"]);
         rollMin = int.Parse(cardInfo["rollMin"]);
         rollMax = int.Parse(cardInfo["rollMax"]);
@@ -41,8 +42,8 @@ public class CardSetup : MonoBehaviour {
 
     IEnumerator GenerateTextures()
     {
-        Debug.Log("generating textures");
         yield return main.DownloadTexture(image);
+        yield return cardBackground.DownloadTexture(background);
     }
 
     void GenerateText()
