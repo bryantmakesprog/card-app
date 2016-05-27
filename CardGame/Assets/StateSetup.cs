@@ -7,6 +7,9 @@ public class StateSetup : MonoBehaviour {
     public int game, player;
     public GameObject cardPrefab;
 
+    public Transform purchasablePosition, landmarkPosition, inventoryPosition;
+    public float cardSpacing;
+
     private ApiController api;
     public string json;
 
@@ -40,6 +43,7 @@ public class StateSetup : MonoBehaviour {
             GameObject entity = GameObject.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity) as GameObject;
             entity.GetComponent<CardSetup>().SetCardId(int.Parse(inventory[i]));
             yield return entity.GetComponent<CardSetup>().GenerateCard();
+            entity.transform.localPosition = inventoryPosition.localPosition + (Vector3.right * i * cardSpacing);
             i++;
         }
     }
@@ -52,6 +56,7 @@ public class StateSetup : MonoBehaviour {
             GameObject entity = GameObject.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity) as GameObject;
             entity.GetComponent<CardSetup>().SetCardId(int.Parse(purchasable[i]));
             yield return entity.GetComponent<CardSetup>().GenerateCard();
+            entity.transform.localPosition = purchasablePosition.localPosition + (Vector3.right * i * cardSpacing);
             i++;
         }
     }
@@ -65,6 +70,7 @@ public class StateSetup : MonoBehaviour {
 //TODO Do something with flipped cards.
             entity.GetComponent<CardSetup>().SetCardId(Mathf.Abs(int.Parse(landmarks[i])));
             yield return entity.GetComponent<CardSetup>().GenerateCard();
+            entity.transform.localPosition = landmarkPosition.localPosition + (Vector3.right * i * cardSpacing);
             i++;
         }
     }
