@@ -15,6 +15,8 @@ public class CardSetup : MonoBehaviour {
     public CardTexture main, cardBackground;
     public UILabel cardName, cardDescription, cardCost, cardTrigger;
 
+    public GameObject purchaseButton;
+
     private ApiController api;
 
     public void SetCardId(int newId)
@@ -29,7 +31,7 @@ public class CardSetup : MonoBehaviour {
         json = api.result;
     }
 
-    public IEnumerator GenerateCard()
+    public IEnumerator GenerateCard(bool isOwned, bool isPurchasable, int pointsOwned)
     {
         yield return GetCardInfo();
         var cardInfo = JSON.Parse(json);
@@ -42,6 +44,7 @@ public class CardSetup : MonoBehaviour {
         rollMax = int.Parse(cardInfo["rollMax"]);
         yield return GenerateTextures();
         GenerateText();
+        GenerateButton(isOwned, isPurchasable, pointsOwned);
     }
 
     IEnumerator GenerateTextures()
@@ -59,6 +62,23 @@ public class CardSetup : MonoBehaviour {
         if (rollMin != rollMax)
             triggerText += " - " + rollMax.ToString();
         cardTrigger.text = triggerText;
+    }
+
+    void GenerateButton(bool isOwned, bool isPurchasable, int pointsOwned)
+    {
+        if (!isOwned)
+            return;
+        else
+        {
+            if (!isPurchasable)
+                return;
+            else
+            {
+                purchaseButton.SetActive(true);
+                if (cost > pointsOwned)
+                    purchaseButton.GetComponent<UIButton>().isEnabled = false;
+            }
+        }
     }
 
 }

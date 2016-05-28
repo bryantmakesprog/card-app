@@ -9,6 +9,7 @@ public class ApiController : MonoBehaviour {
     public string cardUrl;
     public string stateUrl;
     public string purchaseUrl;
+    public string gameUrl;
 
     private bool hasResult;
     public string result;
@@ -28,6 +29,12 @@ public class ApiController : MonoBehaviour {
     {
         string call = stateUrl.Replace("{{GAME}}", game.ToString());
         call = call.Replace("{{PLAYER}}", player.ToString());
+        yield return GetApiJSONResults(call);
+    }
+
+    public IEnumerator GetGameInfo(int game)
+    {
+        string call = gameUrl + game.ToString();
         yield return GetApiJSONResults(call);
     }
 
