@@ -11,8 +11,11 @@ public class GameController : MonoBehaviour {
     public string json;
     public int gameId;
     public float offsetFromCenter;
+    public int player;
 
     public int currentPlayerTurn;
+
+    public GameObject diceRoller;
 
 	// Use this for initialization
 	void Start () {
@@ -37,7 +40,9 @@ public class GameController : MonoBehaviour {
 
     IEnumerator GeneratePlayer(int id, int playerId, int numPlayers)
     {
-        bool myTurn = currentPlayerTurn == id;
+        bool myTurn = (Mathf.Abs(currentPlayerTurn) == player) && (player == id);
+        if (myTurn && (currentPlayerTurn < 0))
+            DisplayDiceWidget();
         float rotation = (360 / numPlayers) * playerId;
         GameObject entity = GameObject.Instantiate(statePrefab) as GameObject;
         StateSetup entityState = entity.GetComponent<StateSetup>();
@@ -48,6 +53,12 @@ public class GameController : MonoBehaviour {
         Vector3 newPosition = RotateVector2D(Vector3.down * offsetFromCenter, rotation);
         entity.transform.localPosition = entity.transform.localPosition + newPosition;
         entity.transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + (Vector3.forward * rotation));
+    }
+
+    private void DisplayDiceWidget()
+    {
+        Debug.Log("Display dice widget.");
+        diceRoller.SetActive(true);
     }
 
     private Vector3 RotateVector2D(Vector3 oldDirection, float angle)
