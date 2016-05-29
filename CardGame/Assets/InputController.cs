@@ -12,13 +12,25 @@ public class InputController : MonoBehaviour {
         api = GameObject.FindObjectOfType<ApiController>();
 	}
 	
-	public IEnumerator PurchaseCard(int card)
+	IEnumerator PurchaseCard(int card)
     {
+        Debug.Log("purchasing");
         yield return api.PostPurchaseInfo(game, player, card);
     }
 
-    public void RequestPurchase(int card)
+    public void RequestPurchase(int card, int cost)
     {
-        gameObject.SendMessage("PurchaseCard", card, SendMessageOptions.DontRequireReceiver);
+        Debug.Log("requesting purchase: " + card);
+        SendMessage("PurchaseCard", card, SendMessageOptions.RequireReceiver);
+        DisablePurchaseButtons();
+    }
+
+    private void DisablePurchaseButtons()
+    {
+        CardButton[] allPurchaseButtons = GameObject.FindObjectsOfType<CardButton>();
+        foreach(CardButton button in allPurchaseButtons)
+        {
+            button.gameObject.SetActive(false);
+        }
     }
 }

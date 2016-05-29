@@ -12,6 +12,8 @@ public class GameController : MonoBehaviour {
     public int gameId;
     public float offsetFromCenter;
 
+    public int currentPlayerTurn;
+
 	// Use this for initialization
 	void Start () {
         gameObject.SendMessage("GenerateGame");
@@ -23,6 +25,7 @@ public class GameController : MonoBehaviour {
         yield return api.GetGameInfo(gameId);
         json = api.result;
         var gameInfo = JSON.Parse(json);
+        currentPlayerTurn = int.Parse(gameInfo["turn"]);
         int i = 0;
         while(i < gameInfo["players"].Count)
         {
@@ -34,13 +37,13 @@ public class GameController : MonoBehaviour {
 
     IEnumerator GeneratePlayer(int id, int playerId, int numPlayers)
     {
+        bool myTurn = currentPlayerTurn == id;
         float rotation = (360 / numPlayers) * playerId;
-        Debug.Log("rotating: " + rotation);
         GameObject entity = GameObject.Instantiate(statePrefab) as GameObject;
         StateSetup entityState = entity.GetComponent<StateSetup>();
         entityState.game = gameId;
         entityState.player = id;
-        yield return entityState.GenerateHand();
+        yield return entityState.GenerateHand(myTurn);
         //entity.transform.localPosition = entity.transform.localPosition + (Vector3.down * offsetFromCenter);
         Vector3 newPosition = RotateVector2D(Vector3.down * offsetFromCenter, rotation);
         entity.transform.localPosition = entity.transform.localPosition + newPosition;

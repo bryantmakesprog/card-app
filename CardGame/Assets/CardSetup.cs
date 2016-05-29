@@ -36,6 +36,7 @@ public class CardSetup : MonoBehaviour {
         yield return GetCardInfo();
         var cardInfo = JSON.Parse(json);
         name = cardInfo["name"];
+        transform.name = name;
         description = cardInfo["description"];
         image = cardInfo["image"];
         background = cardInfo["background"];
