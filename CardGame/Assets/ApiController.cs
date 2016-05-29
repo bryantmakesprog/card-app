@@ -11,6 +11,7 @@ public class ApiController : MonoBehaviour {
     public string purchaseUrl;
     public string gameUrl;
     public string rollUrl;
+    public string playerGamesUrl;
 
     private bool hasResult;
     public string result;
@@ -20,6 +21,12 @@ public class ApiController : MonoBehaviour {
         hasResult = false;
 	}
 	
+    public IEnumerator GetPlayerGames(int player)
+    {
+        string call = playerGamesUrl + player.ToString();
+        yield return GetApiJSONResults(call);
+    }
+
     public IEnumerator GetCardInfo(int id)
     {
         string call = cardUrl + id.ToString();

@@ -19,6 +19,8 @@ public class GameController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        player = PlayerPrefs.GetInt("player");
+        gameId = PlayerPrefs.GetInt("gameToJoin");
         gameObject.SendMessage("GenerateGame");
 	}
 	

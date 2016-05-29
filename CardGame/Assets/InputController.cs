@@ -11,6 +11,8 @@ public class InputController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         api = GameObject.FindObjectOfType<ApiController>();
+        player = PlayerPrefs.GetInt("player");
+        game = PlayerPrefs.GetInt("gameToJoin");
 	}
 	
 	IEnumerator PurchaseCard(int card)
