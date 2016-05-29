@@ -48,7 +48,7 @@ public class GameController : MonoBehaviour {
         StateSetup entityState = entity.GetComponent<StateSetup>();
         entityState.game = gameId;
         entityState.player = id;
-        yield return entityState.GenerateHand(myTurn);
+        yield return entityState.GenerateHand(myTurn, rotation);
         //entity.transform.localPosition = entity.transform.localPosition + (Vector3.down * offsetFromCenter);
         Vector3 newPosition = RotateVector2D(Vector3.down * offsetFromCenter, rotation);
         entity.transform.localPosition = entity.transform.localPosition + newPosition;

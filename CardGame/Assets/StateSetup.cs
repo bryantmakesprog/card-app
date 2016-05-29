@@ -21,7 +21,7 @@ public class StateSetup : MonoBehaviour {
         json = api.result;
     }
 	
-	public IEnumerator GenerateHand(bool isMyTurn)
+	public IEnumerator GenerateHand(bool isMyTurn, float rotation)
     {
         yield return GetHandInfo();
         Debug.Log("generating hand for player " + player);
@@ -32,6 +32,9 @@ public class StateSetup : MonoBehaviour {
         yield return GenerateInventory(handInfo["inventory"], isOwned, isMyTurn);
         yield return GeneratePurchasable(handInfo["purchasable"], isOwned, isMyTurn);
         yield return GenerateLandmarks(handInfo["landmarks"], isOwned, isMyTurn);
+        Vector3 positionAdjustment = Vector3.left * (cardsPerRow / 2 * cardSpacing);
+        positionAdjustment = RotateVector2D(positionAdjustment, rotation);
+        transform.localPosition = transform.localPosition + positionAdjustment;
     }
 
     IEnumerator GenerateInventory(JSONNode inventory, bool isOwned, bool isMyTurn)
@@ -78,5 +81,13 @@ public class StateSetup : MonoBehaviour {
             entity.transform.parent = landmarkPosition.transform;
             i++;
         }
+    }
+
+    private Vector3 RotateVector2D(Vector3 oldDirection, float angle)
+    {
+        float newX = Mathf.Cos(angle * Mathf.Deg2Rad) * (oldDirection.x) - Mathf.Sin(angle * Mathf.Deg2Rad) * (oldDirection.y);
+        float newY = Mathf.Sin(angle * Mathf.Deg2Rad) * (oldDirection.x) + Mathf.Cos(angle * Mathf.Deg2Rad) * (oldDirection.y);
+        float newZ = oldDirection.z;
+        return new Vector3(newX, newY, newZ);
     }
 }
